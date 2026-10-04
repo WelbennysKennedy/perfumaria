@@ -1,0 +1,477 @@
+
+
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<script src="/runtime/gsap.js"></script>
+<script src="/runtime/ScrollTrigger.js"></script>
+
+</helmet>
+
+<div data-noir-stage="1" style="position:fixed;inset:0;z-index:0;background:#040302;pointer-events:none;">
+  <sc-if value="{{ glFail }}" hint-placeholder-val="{{ false }}">
+    <img src="/images/noir-scene.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75;">
+  </sc-if>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 45%, rgba(4,3,2,0) 55%, rgba(4,3,2,.75) 100%);"></div>
+</div>
+
+<header style="position: fixed; top: clamp(12px,1.6vw,22px); left: clamp(12px,2.4vw,40px); right: clamp(12px,2.4vw,40px); z-index: 30; display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 24px; padding: 16px clamp(18px,2.4vw,36px); font-family: 'Jost',sans-serif; background: linear-gradient(180deg,rgba(237,227,209,.07),rgba(237,227,209,.02)); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); border: 1px solid rgba(237,227,209,.12); border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255,244,222,.08),0 20px 50px -30px rgba(0,0,0,.8)">
+  <a href="#hero" data-intro="1" sc-camel-on-click="{{ goHero }}" style="grid-column:1;justify-self:start;font-family:'Cinzel',serif;font-size:19px;font-weight:500;letter-spacing:.5em;color:#ede3d1;transition:letter-spacing .7s cubic-bezier(.2,.7,.2,1);" style-hover="letter-spacing:.64em;color:#ede3d1;">NOIR</a>
+  <nav data-intro="1" style="grid-column:2;display:{{ navDisplay }};gap:clamp(22px,3vw,52px);padding-top:9px;">
+    <a href="#hero" sc-camel-on-mouse-enter="{{ navEnter0 }}" sc-camel-on-mouse-leave="{{ navLeave }}" sc-camel-on-click="{{ goHero }}" style="display:flex;flex-direction:column;gap:9px;font-size:11px;letter-spacing:.28em;color:#cfc4b0;" style-hover="color:#ede3d1;">
+      <span style="display:flex;gap:10px;align-items:baseline;"><span>FRAGRANCE</span></span>
+      <span style="display:block;height:1px;background:#e8b25a;transform-origin:left;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ nl0 }};"></span>
+    </a>
+    <a href="#scent" sc-camel-on-mouse-enter="{{ navEnter1 }}" sc-camel-on-mouse-leave="{{ navLeave }}" sc-camel-on-click="{{ goScent }}" style="display:flex;flex-direction:column;gap:9px;font-size:11px;letter-spacing:.28em;color:#cfc4b0;" style-hover="color:#ede3d1;">
+      <span style="display:flex;gap:10px;align-items:baseline;"><span>COMPOSITION</span></span>
+      <span style="display:block;height:1px;background:#e8b25a;transform-origin:left;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ nl1 }};"></span>
+    </a>
+    <a href="#collection" sc-camel-on-mouse-enter="{{ navEnter2 }}" sc-camel-on-mouse-leave="{{ navLeave }}" sc-camel-on-click="{{ goCollection }}" style="display:flex;flex-direction:column;gap:9px;font-size:11px;letter-spacing:.28em;color:#cfc4b0;" style-hover="color:#ede3d1;">
+      <span style="display:flex;gap:10px;align-items:baseline;"><span>COLLECTION</span></span>
+      <span style="display:block;height:1px;background:#e8b25a;transform-origin:left;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ nl2 }};"></span>
+    </a>
+    <a href="#ritual" sc-camel-on-mouse-enter="{{ navEnter3 }}" sc-camel-on-mouse-leave="{{ navLeave }}" sc-camel-on-click="{{ goRitual }}" style="display:flex;flex-direction:column;gap:9px;font-size:11px;letter-spacing:.28em;color:#cfc4b0;" style-hover="color:#ede3d1;">
+      <span style="display:flex;gap:10px;align-items:baseline;"><span>STORY</span></span>
+      <span style="display:block;height:1px;background:#e8b25a;transform-origin:left;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ nl3 }};"></span>
+    </a>
+  </nav>
+  <a href="#" role="button" data-bag-btn="1" data-intro="1" sc-camel-on-click="{{ openBag }}" sc-camel-on-key-down="{{ bagBtnKey }}" aria-haspopup="dialog" aria-expanded="{{ bagExp }}" style="grid-column:3;justify-self:end;display:flex;gap:8px;align-items:baseline;white-space:nowrap;font-size:11px;letter-spacing:.3em;color:#ede3d1;padding:8px 0;" style-hover="color:#e8b25a;">BAG <span style="display:inline-flex;color:#e8b25a;">(<span style="display:inline-block;overflow:hidden;"><span data-bag-count="1" style="display:inline-block;">{{ bag }}</span></span>)</span></a>
+</header>
+
+<div data-bag-layer="1" style="position:fixed;inset:0;z-index:60;visibility:hidden;font-family:'Jost',sans-serif;color:#ede3d1;">
+  <div data-bag-scrim="1" sc-camel-on-click="{{ closeBag }}" style="position:absolute;inset:0;background:rgba(2,2,1,.58);opacity:0;"></div>
+  <div style="position:absolute;top:0;right:0;bottom:0;width:min(calc(100vw - 16px), clamp(400px, 36vw, 600px));perspective:1600px;pointer-events:none;">
+    <aside data-bag-drawer="1" role="dialog" aria-modal="true" aria-label="Your bag" sc-camel-on-key-down="{{ bagKey }}" style="position:absolute;inset:0;pointer-events:auto;transform-origin:100% 50%;display:flex;flex-direction:column;background:linear-gradient(180deg, rgba(16,13,11,.93), rgba(7,6,5,.95));backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);border-left:1px solid rgba(237,227,209,.12);box-shadow:-50px 0 90px -30px rgba(0,0,0,.85), inset 1px 0 0 rgba(255,236,205,.04);">
+      <span style="position:absolute;left:-1px;top:0;bottom:0;width:1px;background:linear-gradient(180deg, rgba(232,178,90,0), rgba(232,178,90,.45) 30%, rgba(232,178,90,.08) 75%, rgba(232,178,90,0));pointer-events:none;"></span>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:clamp(22px,4vh,36px) clamp(22px,2.6vw,44px);border-bottom:1px solid rgba(237,227,209,.1);">
+        <div style="display:flex;align-items:baseline;gap:18px;">
+          <span style="font-family:'Cinzel',serif;font-size:clamp(18px,1.5vw,24px);letter-spacing:.22em;">YOUR BAG</span>
+          <span style="font-size:10px;letter-spacing:.38em;color:#a8916a;">{{ bagLabel }}</span>
+        </div>
+        <button type="button" data-bag-close="1" sc-camel-on-click="{{ closeBag }}" aria-label="Close bag" style="position:relative;width:44px;height:44px;margin-right:-12px;border:0;background:transparent;cursor:pointer;color:#ede3d1;" style-hover="color:#e8b25a;">
+          <span style="position:absolute;left:13px;top:21px;width:18px;height:1px;background:currentColor;transform:rotate(45deg);"></span>
+          <span style="position:absolute;left:13px;top:21px;width:18px;height:1px;background:currentColor;transform:rotate(-45deg);"></span>
+        </button>
+      </div>
+
+      <div data-bag-body="1" style="flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 clamp(22px,2.6vw,44px);">
+        <sc-if value="{{ bagHas }}" hint-placeholder-val="{{ false }}">
+          <sc-for list="{{ cart }}" as="it" hint-placeholder-count="0">
+            <div data-bag-row="{{ it.id }}" style="overflow:hidden;">
+              <div style="display:grid;grid-template-columns:clamp(72px,6vw,96px) minmax(0,1fr) auto;gap:clamp(16px,1.6vw,26px);padding:clamp(22px,3.4vh,34px) 0;border-bottom:1px solid rgba(237,227,209,.1);align-items:start;">
+                <div style="position:relative;aspect-ratio:4 / 5;overflow:hidden;background:#050403;">
+                  <img src="/images/noir-scene.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 58%;transform-origin:50% 58%;scale:2.2;display:{{ it.d0 }};">
+                  <img src="/images/ember.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 44%;transform-origin:50% 44%;scale:1.35;display:{{ it.d1 }};">
+                  <img src="/images/veil.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%;transform-origin:50% 45%;scale:1.35;display:{{ it.d2 }};">
+                  <span style="position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(237,227,209,.08);"></span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:9px;min-width:0;">
+                  <span style="font-size:9px;letter-spacing:.4em;color:#a8916a;">EXPRESSION Nº {{ it.idx }}</span>
+                  <span style="font-family:'Cinzel',serif;font-size:clamp(18px,1.5vw,24px);letter-spacing:.18em;">{{ it.name }}</span>
+                  <span style="font-size:10px;letter-spacing:.22em;white-space:nowrap;color:#cfc4b0;">EAU DE PARFUM — 100 ML</span>
+                  <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:12px;">
+                    <div style="display:flex;align-items:center;border:1px solid rgba(237,227,209,.16);">
+                      <button type="button" sc-camel-on-click="{{ it.dec }}" aria-label="Decrease quantity" style="width:36px;height:36px;border:0;background:transparent;color:#ede3d1;font-size:14px;cursor:pointer;opacity:{{ it.minusO }};" style-hover="color:#e8b25a;">−</button>
+                      <span style="display:inline-flex;justify-content:center;width:34px;overflow:hidden;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;"><span data-qty="{{ it.id }}" style="display:inline-block;">{{ it.qtyS }}</span></span>
+                      <button type="button" sc-camel-on-click="{{ it.inc }}" aria-label="Increase quantity" style="width:36px;height:36px;border:0;background:transparent;color:#ede3d1;font-size:14px;cursor:pointer;" style-hover="color:#e8b25a;">+</button>
+                    </div>
+                    <button type="button" sc-camel-on-click="{{ it.rm }}" style="padding:6px 0;border:0;border-bottom:1px solid rgba(237,227,209,.2);background:transparent;color:#a8916a;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:.36em;cursor:pointer;" style-hover="color:#ede3d1;border-color:#e8b25a;">REMOVE</button>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right;">
+                  <span style="display:inline-block;overflow:hidden;font-family:'Cinzel',serif;font-size:clamp(15px,1.2vw,18px);letter-spacing:.06em;"><span data-line="{{ it.id }}" style="display:inline-block;">{{ it.total }}</span></span>
+                  <span style="font-size:9px;letter-spacing:.3em;color:#a8916a;">{{ it.unit }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ bagEmpty }}" hint-placeholder-val="{{ false }}">
+          <div data-bag-empty="1" style="min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:22px;padding:48px 0;">
+            <span style="display:block;width:40px;height:1px;background:#e8b25a;"></span>
+            <span style="font-family:'Cinzel',serif;font-size:clamp(24px,2.2vw,34px);line-height:1.15;letter-spacing:.12em;">YOUR BAG IS EMPTY</span>
+            <p data-body-copy="1" style="margin:0;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.04em;color:#cfc4b0;">The trace has not yet been chosen.</p>
+            <button type="button" sc-camel-on-click="{{ exploreColl }}" style="display:inline-flex;align-items:center;gap:16px;margin-top:10px;padding:8px 0;border:0;border-bottom:1px solid rgba(237,227,209,.25);background:transparent;color:#ede3d1;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.34em;cursor:pointer;" style-hover="color:#e8b25a;border-color:#e8b25a;">EXPLORE THE COLLECTION <span style="color:#e8b25a;">→</span></button>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ bagHas }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:18px;padding:clamp(22px,3.4vh,32px) clamp(22px,2.6vw,44px) clamp(24px,4vh,40px);border-top:1px solid rgba(237,227,209,.12);background:linear-gradient(180deg, rgba(5,4,3,0), rgba(5,4,3,.6));">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;">
+            <span style="font-size:10px;letter-spacing:.4em;color:#a8916a;">SUBTOTAL</span>
+            <span style="display:inline-block;overflow:hidden;font-family:'Cinzel',serif;font-size:clamp(22px,1.9vw,30px);letter-spacing:.06em;"><span data-subtotal="1" style="display:inline-block;">{{ subtotal }}</span></span>
+          </div>
+          <span style="font-size:12px;font-weight:300;letter-spacing:.06em;color:#cfc4b0;">Complimentary delivery included.</span>
+          <button type="button" sc-camel-on-mouse-enter="{{ ckEnter }}" sc-camel-on-mouse-leave="{{ ckLeave }}" sc-camel-on-focus="{{ ckEnter }}" sc-camel-on-blur="{{ ckLeave }}" style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px;margin-top:6px;padding:0 24px;border:1px solid rgba(232,178,90,.55);background:rgba(232,178,90,.06);overflow:hidden;cursor:pointer;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.36em;transition:color .5s ease;color:{{ ckText }};">
+            <span style="position:absolute;inset:0;background:linear-gradient(90deg,#c98a3a,#e8b25a);transform-origin:left center;transition:transform .7s cubic-bezier(.7,0,.2,1);transform:{{ ckFill }};"></span>
+            <span style="position:relative;">PROCEED TO CHECKOUT</span>
+            <span style="position:relative;display:flex;align-items:center;gap:0;"><span style="display:block;height:1px;background:currentColor;transition:width .7s cubic-bezier(.7,0,.2,1);width:{{ ckLine }};"></span><span style="display:block;width:6px;height:6px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg);margin-left:-5px;"></span></span>
+          </button>
+        </div>
+      </sc-if>
+    </aside>
+  </div>
+</div>
+
+<main style="position:relative;z-index:1;font-family:'Jost',sans-serif;color:#ede3d1;">
+
+  <section id="hero" data-3d="1" data-screen-label="01 Hero" style="position:relative;height:200vh;">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
+      <div data-hero-exit="1" style="position:absolute;left:clamp(20px,4vw,64px);top:31vh;max-width:300px;">
+        <div data-intro="1" style="display:flex;flex-direction:column;align-items:flex-start;gap:30px;">
+          <span style="display: none; width: 48px; height: 1px; background: #e8b25a"></span>
+          <p data-body-copy="1" style="margin:0;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.04em;color:#cfc4b0;text-wrap:pretty;">A fragrance shaped by smoke, amber and shadow.</p>
+          <div style="position:relative;width:240px;height:115px;margin:-18px 0 0 -22px;">
+            <button type="button" sc-camel-on-click="{{ goCollection }}" aria-label="Discover the NOIR collection" data-noir-cta="1" data-threeui-overlay="discover" style="position:absolute;inset:0;z-index:2;width:100%;height:100%;opacity:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:space-between;gap:20px;min-width:220px;min-height:56px;padding:0 22px;border:1px solid rgba(232,178,90,.55);background:linear-gradient(180deg,rgba(232,178,90,.10),rgba(232,178,90,.03));color:#ede3d1;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.3em;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,244,222,.08);transition:background .35s ease,border-color .35s ease,color .35s ease;" style-hover="background:rgba(232,178,90,.16);border-color:#e8b25a;color:#fff3e4;">DISCOVER NOIR <span aria-hidden="true" style="color:#e8b25a;font-size:16px;">→</span></button>
+            <iframe title="Discover NOIR visual" aria-hidden="true" tabindex="-1" data-threeui-cta="discover" data-threeui-label="DISCOVER NOIR" sandbox="allow-scripts allow-same-origin" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;display:block;background:transparent;color-scheme:normal;pointer-events:none;" allowtransparency="true"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div data-hero-exit="1" style="position:absolute;right:clamp(20px,4vw,64px);top:31vh;">
+        <div data-intro="1" style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+          <span style="writing-mode:vertical-rl;font-size:10px;letter-spacing:.42em;color:#a8916a;">EAU DE PARFUM · Nº 01</span>
+          <span style="position:relative;display:block;width:1px;height:80px;background:rgba(237,227,209,.16);overflow:hidden;"><span data-scroll-dot="1" style="position:absolute;left:0;top:0;width:1px;height:18px;background:#e8b25a;"></span></span>
+          <span style="font-size:10px;letter-spacing:.42em;color:#cfc4b0;writing-mode:vertical-rl;">SCROLL</span>
+        </div>
+      </div>
+
+      <h1 style="position:absolute;left:clamp(20px,4vw,64px);right:clamp(20px,4vw,64px);bottom:clamp(40px,8vh,96px);margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(40px,7.2vw,150px);line-height:.94;letter-spacing:.01em;color:#ede3d1;">
+        <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero-x="1" style="display:block;"><span data-hero-line="1" style="display:block;white-space:nowrap;">THE SCENT</span></span></span>
+        <span style="display:flex;flex-wrap:wrap;column-gap:.28em;padding-left:clamp(0px,14vw,280px);">
+          <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero-x="1" style="display:block;"><span data-hero-line="1" style="display:block;white-space:nowrap;">OF THE</span></span></span>
+          <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-hero-x="1" style="display:block;"><span data-hero-line="1" style="display:block;white-space:nowrap;">UNKNOWN</span></span></span>
+        </span>
+      </h1>
+    </div>
+  </section>
+
+  <section id="scent" data-3d="1" data-screen-label="02 Scent Architecture" style="position:relative;height:320vh;">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
+      <div style="position:absolute;left:clamp(20px,4vw,64px);top:15vh;display:flex;flex-direction:column;gap:20px;max-width:440px;">
+        <span style="display:block;overflow:hidden;"><span data-scent-reveal="1" style="display:block;font-size:10px;letter-spacing:.4em;color:#a8916a;">01 / THE COMPOSITION</span></span>
+        <span style="display:block;overflow:hidden;"><span data-scent-reveal="1" style="display:block;font-family:'Cinzel',serif;font-size:clamp(26px,2.8vw,52px);line-height:1;letter-spacing:.04em;color:#ede3d1;">SCENT ARCHITECTURE</span></span>
+        <span style="display:block;overflow:hidden;"><span data-scent-reveal="1" data-body-copy="1" style="display:block;max-width:300px;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.04em;color:#cfc4b0;text-wrap:pretty;">Three elements. One presence. A fragrance built from contrast.</span></span>
+      </div>
+
+      <div style="position:absolute;left:clamp(20px,4vw,64px);right:clamp(20px,4vw,64px);bottom:8vh;display:flex;flex-direction:column;">
+        <div sc-camel-on-mouse-enter="{{ noteEnter0 }}" sc-camel-on-mouse-leave="{{ noteLeave }}" sc-camel-on-click="{{ noteEnter0 }}" style="display:flex;align-items:flex-end;gap:clamp(14px,2vw,32px);cursor:default;">
+          <span style="display:flex;flex-direction:column;gap:10px;min-width:40px;padding-bottom:min(1.6vw,2.6vh);">
+            <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#a8916a;">I</span>
+            <span style="display:block;height:1px;background:#e8b25a;transition:width .8s cubic-bezier(.2,.7,.2,1);width:{{ mk0 }};"></span>
+          </span>
+          <span style="font-family:'Cinzel',serif;font-size:min(10.5vw,17vh);line-height:.88;letter-spacing:.02em;-webkit-text-stroke-width:1px;transition:color .9s ease,-webkit-text-stroke-color .9s ease;color:{{ wc0 }};-webkit-text-stroke-color:{{ ws0 }};">SMOKE</span>
+          <span style="display:flex;flex-direction:column;gap:6px;padding-bottom:min(1.6vw,2.6vh);font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#cfc4b0;transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);opacity:{{ do0 }};transform:{{ dt0 }};"><span>Dark</span><span>Mineral</span><span>Mysterious</span></span>
+        </div>
+        <div sc-camel-on-mouse-enter="{{ noteEnter1 }}" sc-camel-on-mouse-leave="{{ noteLeave }}" sc-camel-on-click="{{ noteEnter1 }}" style="display:flex;align-items:flex-end;gap:clamp(14px,2vw,32px);cursor:default;">
+          <span style="display:flex;flex-direction:column;gap:10px;min-width:40px;padding-bottom:min(1.6vw,2.6vh);">
+            <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#a8916a;">II</span>
+            <span style="display:block;height:1px;background:#e8b25a;transition:width .8s cubic-bezier(.2,.7,.2,1);width:{{ mk1 }};"></span>
+          </span>
+          <span style="font-family:'Cinzel',serif;font-size:min(10.5vw,17vh);line-height:.88;letter-spacing:.02em;-webkit-text-stroke-width:1px;transition:color .9s ease,-webkit-text-stroke-color .9s ease;color:{{ wc1 }};-webkit-text-stroke-color:{{ ws1 }};">AMBER</span>
+          <span style="display:flex;flex-direction:column;gap:6px;padding-bottom:min(1.6vw,2.6vh);font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#cfc4b0;transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);opacity:{{ do1 }};transform:{{ dt1 }};"><span>Warm</span><span>Resinous</span><span>Luminous</span></span>
+        </div>
+        <div sc-camel-on-mouse-enter="{{ noteEnter2 }}" sc-camel-on-mouse-leave="{{ noteLeave }}" sc-camel-on-click="{{ noteEnter2 }}" style="display:flex;align-items:flex-end;gap:clamp(14px,2vw,32px);cursor:default;">
+          <span style="display:flex;flex-direction:column;gap:10px;min-width:40px;padding-bottom:min(1.6vw,2.6vh);">
+            <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#a8916a;">III</span>
+            <span style="display:block;height:1px;background:#e8b25a;transition:width .8s cubic-bezier(.2,.7,.2,1);width:{{ mk2 }};"></span>
+          </span>
+          <span style="font-family:'Cinzel',serif;font-size:min(10.5vw,17vh);line-height:.88;letter-spacing:.02em;-webkit-text-stroke-width:1px;transition:color .9s ease,-webkit-text-stroke-color .9s ease;color:{{ wc2 }};-webkit-text-stroke-color:{{ ws2 }};">CEDAR</span>
+          <span style="display:flex;flex-direction:column;gap:6px;padding-bottom:min(1.6vw,2.6vh);font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#cfc4b0;transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);opacity:{{ do2 }};transform:{{ dt2 }};"><span>Dry</span><span>Woody</span><span>Grounded</span></span>
+        </div>
+      </div>
+
+      <div style="position:absolute;right:clamp(20px,4vw,64px);top:15vh;display:flex;align-items:center;gap:14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#a8916a;">
+        <span style="color:#e8b25a;">{{ noteNum }}</span>
+        <span style="display:block;width:40px;height:1px;background:rgba(237,227,209,.25);"></span>
+        <span>03</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="collection" data-screen-label="03 Collection" sc-camel-on-pointer-move="{{ collMove }}" sc-camel-on-pointer-leave="{{ collLeave }}" style="position:relative;background:#060504;padding:clamp(100px,15vh,170px) clamp(20px,4vw,64px) clamp(90px,13vh,150px);overflow:hidden;">
+    <div data-coll-atmos="0" style="position:absolute;left:50%;top:60%;width:130vw;height:110vh;transform:translate(-50%,-50%);background:radial-gradient(closest-side, rgba(196,158,104,.11), rgba(0,0,0,0));opacity:1;pointer-events:none;"></div>
+    <div data-coll-atmos="1" style="position:absolute;left:50%;top:60%;width:130vw;height:110vh;transform:translate(-50%,-50%);background:radial-gradient(closest-side, rgba(196,98,38,.24), rgba(0,0,0,0));opacity:0;pointer-events:none;"></div>
+    <div data-coll-atmos="2" style="position:absolute;left:50%;top:60%;width:130vw;height:110vh;transform:translate(-50%,-50%);background:radial-gradient(closest-side, rgba(150,140,178,.15), rgba(0,0,0,0));opacity:0;pointer-events:none;"></div>
+
+    <div style="position:relative;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px;">
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <span style="font-size:10px;letter-spacing:.4em;color:#a8916a;">02 / THREE EXPRESSIONS</span>
+        <h2 data-coll-title="1" style="margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(40px,6.4vw,130px);line-height:.92;letter-spacing:.01em;color:#ede3d1;">THE COLLECTION</h2>
+      </div>
+      <span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#a8916a;padding-bottom:10px;">{{ cIdx }} / 03</span>
+    </div>
+
+    <div data-folio-stage="1" style="position:relative;display:flex;justify-content:center;margin-top:clamp(48px,8vh,96px);perspective:2400px;perspective-origin:50% 35%;">
+      <div data-folio-intro="1" style="position:relative;transform-style:preserve-3d;width:min(100%, 1180px, calc((100vh - 230px) * 1.6), max(68vw, min(100%, 640px)));">
+        <div style="position:absolute;left:3%;right:3%;bottom:-8%;height:14%;background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0,0,0,.9), rgba(0,0,0,0));filter:blur(16px);transform:translateZ(-30px);pointer-events:none;"></div>
+        <div data-folio="1" sc-camel-on-pointer-down="{{ folioDown }}" style="position:relative;width:100%;aspect-ratio:8 / 5;transform-style:preserve-3d;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;--page:#0b0a09;--edge:rgba(232,178,90,.42);--sheen:rgba(255,226,180,.07);--hx:50%;--hy:40%;">
+          <div style="position:absolute;inset:0;transform:translate3d(0,5px,-8px);background:#020101;border-bottom:1px solid rgba(232,178,90,.16);box-shadow:0 40px 70px -24px rgba(0,0,0,.95);"></div>
+
+          <div data-page="L" style="position:absolute;left:0;top:0;width:50%;height:100%;overflow:hidden;background:#0b0a09;">
+            <sc-for list="{{ folio }}" as="f" hint-placeholder-count="0">
+              <div data-lp="{{ $index }}" style="position:absolute;inset:0;container-type:inline-size;overflow:hidden;visibility:{{ f.vis }};background:var(--page);box-shadow:inset 0 0 0 1px rgba(237,227,209,.04),inset 0 0 60px rgba(0,0,0,.55);">
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 sc-camel-base-frequency=%27.85%27 sc-camel-num-octaves=%272%27 sc-camel-stitch-tiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');opacity:.07;pointer-events:none;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(0,0,0,0) 80%, rgba(0,0,0,.5) 97%, rgba(0,0,0,.75));pointer-events:none;"></div>
+                <div style="position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg, rgba(0,0,0,0), var(--edge) 30%, var(--edge) 70%, rgba(0,0,0,0));"></div>
+                <div style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(255,240,215,.1), rgba(255,240,215,0) 70%);"></div>
+                <span style="position:absolute;left:2.6cqw;top:2.6cqw;width:9px;height:9px;pointer-events:none;"><span style="position:absolute;left:4px;top:0;width:1px;height:9px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:0;top:4px;width:9px;height:1px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:2px;top:2px;width:3px;height:3px;border:1px solid rgba(232,178,90,.35);border-radius:50%;"></span></span>
+                <span style="position:absolute;left:2.4cqw;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;font-family:'Cinzel',serif;font-size:max(7px,1.4cqw);letter-spacing:.5em;color:rgba(232,178,90,.55);">FOLIO {{ f.pgL }}</span>
+                <div style="position:absolute;inset:0;bottom:26cqw;padding:7cqw 8cqw 0 9cqw;display:flex;flex-direction:column;gap:4.4cqw;overflow:hidden;">
+                  <div data-meta="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;white-space:nowrap;font-size:max(8px,1.7cqw);letter-spacing:.4em;color:#a8916a;">
+                    <span style="display:{{ idxDisp }};">INDEX {{ f.idx }} / 03</span><span>EXPRESSION Nº {{ f.idx }}</span>
+                  </div>
+                  <div data-meta="1" style="height:1px;background:linear-gradient(90deg, var(--edge), rgba(0,0,0,0) 85%);opacity:.6;"></div>
+                  <p data-meta="1" data-body-copy="1" style="margin:0;max-width:76%;display:{{ detailDisp }};font-size:max(12px,2.7cqw);font-weight:300;line-height:1.7;letter-spacing:.03em;color:#cfc4b0;text-wrap:pretty;">{{ f.desc }}</p>
+                  <div data-meta="1" style="display:{{ detailDisp }};flex-direction:column;margin-top:1cqw;">
+                    <span style="font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#a8916a;padding-bottom:1.6cqw;">NOTES</span>
+                    <div style="display:flex;align-items:baseline;gap:3cqw;padding:1.5cqw 0;border-top:1px solid rgba(237,227,209,.1);"><span style="width:5cqw;font-family:'Cinzel',serif;font-size:max(8px,1.5cqw);letter-spacing:.3em;color:#a8916a;">I</span><span style="font-family:'Cinzel',serif;font-size:max(13px,3.3cqw);letter-spacing:.2em;color:#ede3d1;">{{ f.n1 }}</span></div>
+                    <div style="display:flex;align-items:baseline;gap:3cqw;padding:1.5cqw 0;border-top:1px solid rgba(237,227,209,.1);"><span style="width:5cqw;font-family:'Cinzel',serif;font-size:max(8px,1.5cqw);letter-spacing:.3em;color:#a8916a;">II</span><span style="font-family:'Cinzel',serif;font-size:max(13px,3.3cqw);letter-spacing:.2em;color:#ede3d1;">{{ f.n2 }}</span></div>
+                    <div style="display:flex;align-items:baseline;gap:3cqw;padding:1.5cqw 0;border-top:1px solid rgba(237,227,209,.1);border-bottom:1px solid rgba(237,227,209,.1);"><span style="width:5cqw;font-family:'Cinzel',serif;font-size:max(8px,1.5cqw);letter-spacing:.3em;color:#a8916a;">III</span><span style="font-family:'Cinzel',serif;font-size:max(13px,3.3cqw);letter-spacing:.2em;color:#ede3d1;">{{ f.n3 }}</span></div>
+                  </div>
+                  <div data-meta="1" style="display:{{ detailDisp }};flex-wrap:wrap;align-items:center;gap:10px 4cqw;margin-top:1cqw;">
+                    <a href="#" sc-camel-on-click="{{ addBag }}" style="display:inline-flex;align-items:center;gap:14px;font-size:max(9px,1.8cqw);letter-spacing:.34em;color:#ede3d1;padding:5px 0;border-bottom:1px solid rgba(237,227,209,.25);transition:border-color .5s ease,letter-spacing .6s cubic-bezier(.2,.7,.2,1);" style-hover="color:#e8b25a;border-color:#e8b25a;letter-spacing:.4em;">ADD TO BAG <span style="color:#e8b25a;">+</span></a>
+                    <span style="font-size:max(8px,1.5cqw);letter-spacing:.34em;color:#a8916a;">EAU DE PARFUM — 100 ML</span>
+                  </div>
+                </div>
+                <span data-title="1" style="position:absolute;left:7cqw;bottom:-.14em;font-family:'Cinzel',serif;font-size:27cqw;line-height:1;letter-spacing:.01em;color:#ede3d1;white-space:nowrap;">{{ f.name }}</span>
+              </div>
+            </sc-for>
+            <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--hx) var(--hy), var(--sheen), rgba(0,0,0,0) 55%);"></div>
+            <div data-shadow="L" style="position:absolute;inset:0;pointer-events:none;transform-origin:100% 50%;opacity:0;background:linear-gradient(270deg, rgba(0,0,0,.7), rgba(0,0,0,.45) 62%, rgba(0,0,0,0));"></div>
+          </div>
+
+          <div data-page="R" style="position:absolute;left:50%;top:0;width:50%;height:100%;overflow:hidden;background:#050403;">
+            <div data-rp="0" style="position:absolute;inset:0;overflow:hidden;container-type:inline-size;visibility:visible;background:#050403;">
+                <img data-env="1" loading="lazy" decoding="async" src="/images/noir-scene.jpg" alt="NOIR" draggable="false" style="position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 55%;">
+                <img data-bottle="1" loading="lazy" decoding="async" src="/images/noir-scene.jpg" alt="" draggable="false" style="position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 55%;-webkit-mask-image:radial-gradient(ellipse 30% 30% at 50% 57%, #000 60%, transparent 100%);mask-image:radial-gradient(ellipse 30% 30% at 50% 57%, #000 60%, transparent 100%);filter:brightness(1.07) contrast(1.04);">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,4,3,.42), rgba(5,4,3,0) 22%, rgba(5,4,3,0) 68%, rgba(5,4,3,.62));"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.22) 5%, rgba(0,0,0,0) 15%);"></div>
+                <div style="position:absolute;right:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg, rgba(0,0,0,0), var(--edge) 35%, var(--edge) 65%, rgba(0,0,0,0));"></div>
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 sc-camel-base-frequency=%27.85%27 sc-camel-num-octaves=%272%27 sc-camel-stitch-tiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');opacity:.05;pointer-events:none;"></div>
+                <span style="position:absolute;left:7cqw;top:6.4cqw;font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#cfc4b0;">PLATE 01</span>
+                <span style="position:absolute;right:5cqw;top:6.4cqw;display:flex;gap:2px;"><span style="width:4px;height:4px;background:#ede3d1;opacity:.5;"></span><span style="width:4px;height:4px;background:#e8b25a;opacity:.6;"></span><span style="width:4px;height:4px;background:#f0873a;opacity:.5;"></span><span style="width:4px;height:4px;background:#b9a2d8;opacity:.5;"></span></span>
+                <span style="position:absolute;right:2.6cqw;bottom:2.6cqw;width:9px;height:9px;pointer-events:none;"><span style="position:absolute;left:4px;top:0;width:1px;height:9px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:0;top:4px;width:9px;height:1px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:2px;top:2px;width:3px;height:3px;border:1px solid rgba(232,178,90,.35);border-radius:50%;"></span></span>
+                <div style="position:absolute;left:7cqw;right:7cqw;bottom:6cqw;display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#cfc4b0;">
+                  <span>NOIR — Nº 01</span><span style="font-family:'Cinzel',serif;color:rgba(232,178,90,.7);">02</span>
+                </div>
+              </div>
+            
+              <div data-rp="1" style="position:absolute;inset:0;overflow:hidden;container-type:inline-size;visibility:hidden;background:#050403;">
+                <img data-env="1" loading="lazy" decoding="async" src="/images/ember.jpg" alt="EMBER" draggable="false" style="position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 50%;">
+                <img data-bottle="1" loading="lazy" decoding="async" src="/images/ember.jpg" alt="" draggable="false" style="position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 50%;-webkit-mask-image:radial-gradient(ellipse 32% 36% at 50% 45%, #000 60%, transparent 100%);mask-image:radial-gradient(ellipse 32% 36% at 50% 45%, #000 60%, transparent 100%);filter:brightness(1.07) contrast(1.04);">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,4,3,.42), rgba(5,4,3,0) 22%, rgba(5,4,3,0) 68%, rgba(5,4,3,.62));"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.22) 5%, rgba(0,0,0,0) 15%);"></div>
+                <div style="position:absolute;right:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg, rgba(0,0,0,0), var(--edge) 35%, var(--edge) 65%, rgba(0,0,0,0));"></div>
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 sc-camel-base-frequency=%27.85%27 sc-camel-num-octaves=%272%27 sc-camel-stitch-tiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');opacity:.05;pointer-events:none;"></div>
+                <span style="position:absolute;left:7cqw;top:6.4cqw;font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#cfc4b0;">PLATE 02</span>
+                <span style="position:absolute;right:5cqw;top:6.4cqw;display:flex;gap:2px;"><span style="width:4px;height:4px;background:#ede3d1;opacity:.5;"></span><span style="width:4px;height:4px;background:#e8b25a;opacity:.6;"></span><span style="width:4px;height:4px;background:#f0873a;opacity:.5;"></span><span style="width:4px;height:4px;background:#b9a2d8;opacity:.5;"></span></span>
+                <span style="position:absolute;right:2.6cqw;bottom:2.6cqw;width:9px;height:9px;pointer-events:none;"><span style="position:absolute;left:4px;top:0;width:1px;height:9px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:0;top:4px;width:9px;height:1px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:2px;top:2px;width:3px;height:3px;border:1px solid rgba(232,178,90,.35);border-radius:50%;"></span></span>
+                <div style="position:absolute;left:7cqw;right:7cqw;bottom:6cqw;display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#cfc4b0;">
+                  <span>EMBER — Nº 02</span><span style="font-family:'Cinzel',serif;color:rgba(232,178,90,.7);">04</span>
+                </div>
+              </div>
+            
+              <div data-rp="2" style="position:absolute;inset:0;overflow:hidden;container-type:inline-size;visibility:hidden;background:#050403;">
+                <img data-env="1" loading="lazy" decoding="async" src="/images/veil.jpg" alt="VEIL" draggable="false" style="position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 50%;">
+                <img data-bottle="1" loading="lazy" decoding="async" src="/images/veil.jpg" alt="" draggable="false" style="position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;object-position:50% 50%;-webkit-mask-image:radial-gradient(ellipse 32% 36% at 50% 46%, #000 60%, transparent 100%);mask-image:radial-gradient(ellipse 32% 36% at 50% 46%, #000 60%, transparent 100%);filter:brightness(1.07) contrast(1.04);">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,4,3,.42), rgba(5,4,3,0) 22%, rgba(5,4,3,0) 68%, rgba(5,4,3,.62));"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.22) 5%, rgba(0,0,0,0) 15%);"></div>
+                <div style="position:absolute;right:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg, rgba(0,0,0,0), var(--edge) 35%, var(--edge) 65%, rgba(0,0,0,0));"></div>
+                <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 sc-camel-base-frequency=%27.85%27 sc-camel-num-octaves=%272%27 sc-camel-stitch-tiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');opacity:.05;pointer-events:none;"></div>
+                <span style="position:absolute;left:7cqw;top:6.4cqw;font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#cfc4b0;">PLATE 03</span>
+                <span style="position:absolute;right:5cqw;top:6.4cqw;display:flex;gap:2px;"><span style="width:4px;height:4px;background:#ede3d1;opacity:.5;"></span><span style="width:4px;height:4px;background:#e8b25a;opacity:.6;"></span><span style="width:4px;height:4px;background:#f0873a;opacity:.5;"></span><span style="width:4px;height:4px;background:#b9a2d8;opacity:.5;"></span></span>
+                <span style="position:absolute;right:2.6cqw;bottom:2.6cqw;width:9px;height:9px;pointer-events:none;"><span style="position:absolute;left:4px;top:0;width:1px;height:9px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:0;top:4px;width:9px;height:1px;background:rgba(232,178,90,.45);"></span><span style="position:absolute;left:2px;top:2px;width:3px;height:3px;border:1px solid rgba(232,178,90,.35);border-radius:50%;"></span></span>
+                <div style="position:absolute;left:7cqw;right:7cqw;bottom:6cqw;display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:max(8px,1.6cqw);letter-spacing:.42em;color:#cfc4b0;">
+                  <span>VEIL — Nº 03</span><span style="font-family:'Cinzel',serif;color:rgba(232,178,90,.7);">06</span>
+                </div>
+              </div>
+            <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--hx) var(--hy), var(--sheen), rgba(0,0,0,0) 55%);"></div>
+            <div data-shadow="R" style="position:absolute;inset:0;pointer-events:none;transform-origin:0% 50%;opacity:0;background:linear-gradient(90deg, rgba(0,0,0,.7), rgba(0,0,0,.45) 62%, rgba(0,0,0,0));"></div>
+          </div>
+
+          <div style="position:absolute;left:calc(50% - 4px);top:-.5%;width:8px;height:101%;transform:translateZ(2px);background:linear-gradient(90deg,#060504,#2a241c 28%,#6e5c41 48%,#2a241c 64%,#060504);box-shadow:0 0 14px rgba(0,0,0,.85);pointer-events:none;">
+            <span style="position:absolute;left:0;right:0;top:0;height:2px;background:var(--edge);"></span>
+            <span style="position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--edge);"></span>
+            <span style="position:absolute;left:3.5px;top:8%;bottom:8%;width:1px;background:repeating-linear-gradient(180deg, rgba(232,178,90,.35) 0 6px, rgba(0,0,0,0) 6px 14px);"></span>
+          </div>
+          <div data-leaf-host="1" style="position:absolute;left:50%;top:0;width:50%;height:100%;transform-style:preserve-3d;transform:translateZ(1px);pointer-events:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div data-coll-late="1" style="position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:20px;margin-top:clamp(44px,7vh,76px);">
+      <span></span>
+      <div style="display:flex;align-items:center;gap:clamp(12px,1.6vw,22px);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;">
+        <a href="#" sc-camel-on-mouse-enter="{{ chEnter0 }}" sc-camel-on-mouse-leave="{{ chLeave }}" sc-camel-on-click="{{ ch0 }}" style="padding:12px 4px;transition:color .6s ease;color:{{ chc0 }};" style-hover="color:#ede3d1;">01</a>
+        <span style="display:block;width:clamp(20px,2.4vw,36px);height:1px;background:rgba(237,227,209,.22);"></span>
+        <a href="#" sc-camel-on-mouse-enter="{{ chEnter1 }}" sc-camel-on-mouse-leave="{{ chLeave }}" sc-camel-on-click="{{ ch1 }}" style="padding:12px 4px;transition:color .6s ease;color:{{ chc1 }};" style-hover="color:#ede3d1;">02</a>
+        <span style="display:block;width:clamp(20px,2.4vw,36px);height:1px;background:rgba(237,227,209,.22);"></span>
+        <a href="#" sc-camel-on-mouse-enter="{{ chEnter2 }}" sc-camel-on-mouse-leave="{{ chLeave }}" sc-camel-on-click="{{ ch2 }}" style="padding:12px 4px;transition:color .6s ease;color:{{ chc2 }};" style-hover="color:#ede3d1;">03</a>
+      </div>
+      <span style="justify-self:end;display:flex;align-items:center;gap:12px;font-size:9px;letter-spacing:.42em;color:#a8916a;white-space:nowrap;"><span style="display:block;width:22px;height:1px;background:rgba(232,178,90,.5);"></span>DRAG / TURN</span>
+    </div>
+
+    <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;display:flex;flex-direction:column;gap:20px;margin-top:36px;">
+        <span style="font-size:11px;letter-spacing:.32em;color:#ede3d1;">{{ cNotes }}</span>
+        <p data-body-copy="1" style="margin:0;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.04em;color:#cfc4b0;text-wrap:pretty;">{{ cDesc }}</p>
+        <a href="#" sc-camel-on-click="{{ addBag }}" style="display:inline-flex;align-items:center;gap:16px;align-self:flex-start;font-size:11px;letter-spacing:.34em;color:#ede3d1;padding:6px 0;border-bottom:1px solid rgba(237,227,209,.25);">ADD TO BAG <span style="color:#e8b25a;">+</span></a>
+      </div>
+    </sc-if>
+  </section>
+
+  <section id="ritual" data-3d="1" data-screen-label="04 The Ritual" style="position:relative;height:320vh;">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
+      <span data-ritual-eyebrow="1" style="position:absolute;left:52vw;top:17vh;font-size:10px;letter-spacing:.4em;color:#a8916a;">03 / THE RITUAL</span>
+      <h2 style="position:absolute;right:clamp(20px,4vw,64px);top:24vh;margin:0;text-align:right;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(44px,7.4vw,150px);line-height:.94;letter-spacing:.01em;color:#ede3d1;">
+        <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-ritual-line="1" style="display:block;white-space:nowrap;">A TRACE</span></span>
+        <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-ritual-line="1" style="display:block;white-space:nowrap;">THAT REMAINS.</span></span>
+      </h2>
+      <div style="position:absolute;left:52vw;right:clamp(20px,4vw,64px);bottom:10vh;display:flex;flex-wrap:wrap;gap:24px clamp(20px,3vw,48px);">
+        <div data-ritual-step="1" style="flex:1 1 120px;display:flex;flex-direction:column;gap:16px;">
+          <span data-ritual-rule="1" style="display:block;height:1px;background:#e8b25a;transform-origin:left;"></span>
+          <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:#a8916a;">I</span>
+          <span style="font-family:'Cinzel',serif;font-size:clamp(18px,1.7vw,28px);letter-spacing:.12em;color:#ede3d1;white-space:nowrap;">ON SKIN</span>
+        </div>
+        <div data-ritual-step="1" style="flex:1 1 120px;display:flex;flex-direction:column;gap:16px;">
+          <span data-ritual-rule="1" style="display:block;height:1px;background:#e8b25a;transform-origin:left;"></span>
+          <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:#a8916a;">II</span>
+          <span style="font-family:'Cinzel',serif;font-size:clamp(18px,1.7vw,28px);letter-spacing:.12em;color:#ede3d1;white-space:nowrap;">IN MOTION</span>
+        </div>
+        <div data-ritual-step="1" style="flex:1 1 120px;display:flex;flex-direction:column;gap:16px;">
+          <span data-ritual-rule="1" style="display:block;height:1px;background:#e8b25a;transform-origin:left;"></span>
+          <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:#a8916a;">III</span>
+          <span style="font-family:'Cinzel',serif;font-size:clamp(18px,1.7vw,28px);letter-spacing:.12em;color:#ede3d1;white-space:nowrap;">AFTER DARK</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="immersion" data-3d="1" data-screen-label="05 Immersion" style="position:relative;height:440vh;">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
+      <svg width="0" height="0" aria-hidden="true" style="position:absolute;width:0;height:0;">
+        <filter id="immWarp" x="-5%" y="-20%" width="110%" height="140%">
+          <feTurbulence data-imm-turb="1" type="fractalNoise" sc-camel-base-frequency="0.006 0.05" sc-camel-num-octaves="2" seed="3" result="n"></feTurbulence>
+          <feDisplacementMap data-imm-disp="1" in="SourceGraphic" in2="n" scale="0" sc-camel-x-channel-selector="R" sc-camel-y-channel-selector="G"></feDisplacementMap>
+        </filter>
+      </svg>
+      <span data-imm-eyebrow="1" style="position:absolute;left:clamp(20px,4vw,64px);top:17vh;font-size:10px;letter-spacing:.4em;color:#a8916a;">04 / IMMERSION</span>
+      <h2 data-imm-head="1" style="position:absolute;left:clamp(20px,4vw,64px);top:23vh;margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(40px,6.2vw,124px);line-height:.94;letter-spacing:.01em;color:#ede3d1;">
+        <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-imm-line="1" style="display:block;white-space:nowrap;">BENEATH</span></span>
+        <span style="display:block;overflow:hidden;padding-bottom:.05em;"><span data-imm-line="1" style="display:block;white-space:nowrap;">THE SURFACE.</span></span>
+      </h2>
+      <p data-imm-sub="1" data-body-copy="1" style="position:absolute;left:clamp(20px,4vw,64px);bottom:12vh;margin:0;max-width:300px;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.04em;color:#cfc4b0;text-wrap:pretty;">Depth reveals what light cannot.</p>
+    </div>
+  </section>
+
+  <section id="craft" data-3d="1" data-screen-label="06 Crafted in Shadow" style="position:relative;background:{{ craftBg }};padding:clamp(100px,16vh,180px) 0 clamp(110px,16vh,190px);overflow-x:clip;">
+    <span style="display:block;padding:0 clamp(20px,4vw,64px);font-size:10px;letter-spacing:.4em;color:#a8916a;">05 / MATERIAL</span>
+    <div data-craft-marquee="1" style="margin-top:clamp(24px,4vh,48px);white-space:nowrap;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(72px,15vw,300px);line-height:.9;letter-spacing:.01em;color:#ede3d1;width:max-content;">CRAFTED IN <span style="color:transparent;-webkit-text-stroke:1px rgba(232,178,90,.8);">SHADOW</span></div>
+
+    <div data-craft-row="1" style="position:relative;display:flex;flex-wrap:wrap;gap:0 clamp(48px,6vw,120px);padding:clamp(64px,10vh,120px) clamp(20px,4vw,64px) 0;">
+      <div data-craft-vis="1" style="position:sticky;top:0;z-index:2;flex:1 1 {{ craftVisB }};align-self:flex-start;height:{{ craftVisH }};display:flex;align-items:center;pointer-events:none;">
+        <div data-craft-film="1" style="position:relative;width:100%;height:{{ craftFilmH }};">
+          <div data-craft-plate="1" style="position:absolute;inset:0;overflow:hidden;background:#0c0a08;">
+            <img src="/images/noir-scene.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%;">
+            <span style="position:absolute;left:20px;bottom:20px;font-size:10px;letter-spacing:.4em;color:#cfc4b0;">NOIR · FILM Nº 01</span>
+          </div>
+          <span style="position:absolute;left:0;top:0;width:14px;height:14px;border-left:1px solid rgba(232,178,90,.4);border-top:1px solid rgba(232,178,90,.4);pointer-events:none;"></span>
+          <span style="position:absolute;right:0;top:0;width:14px;height:14px;border-right:1px solid rgba(232,178,90,.4);border-top:1px solid rgba(232,178,90,.4);pointer-events:none;"></span>
+          <span style="position:absolute;left:0;bottom:0;width:14px;height:14px;border-left:1px solid rgba(232,178,90,.4);border-bottom:1px solid rgba(232,178,90,.4);pointer-events:none;"></span>
+          <span style="position:absolute;right:0;bottom:0;width:14px;height:14px;border-right:1px solid rgba(232,178,90,.4);border-bottom:1px solid rgba(232,178,90,.4);pointer-events:none;"></span>
+          <span data-craft-idx="1" style="position:absolute;left:20px;top:20px;font-size:9px;letter-spacing:.42em;color:#a8916a;opacity:0;transition:opacity .8s ease;"></span>
+        </div>
+      </div>
+
+      <div data-craft-copy="1" style="flex:1 1 380px;display:flex;flex-direction:column;padding-top:clamp(0px,8vh,100px);">
+        <p style="margin:0 0 clamp(40px,8vh,90px);max-width:560px;font-family:'Cinzel',serif;font-size:clamp(22px,2.2vw,40px);line-height:1.3;letter-spacing:.02em;color:#ede3d1;text-wrap:pretty;">Darkness is not an absence. It is the material that gives light its edge.</p>
+
+          <div data-craft-item="0" style="position:relative;min-height:clamp(420px,82vh,900px);display:flex;flex-direction:column;justify-content:center;transition:opacity .9s ease;">
+            <div style="display:flex;flex-direction:column;gap:16px;max-width:440px;border-top:1px solid rgba(237,227,209,.14);">
+              <span style="display:block;overflow:hidden;padding-top:20px;"><span data-craft-l="1" style="display:flex;gap:14px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;"><span style="color:#e8b25a;">01</span><span data-craft-name="1" style="color:#ede3d1;transition:color .8s ease;">GLASS</span></span></span>
+              <span data-craft-desc="1" style="display:block;overflow:hidden;"><span data-craft-l="1" data-body-copy="1" style="display:block;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.03em;color:#cfc4b0;text-wrap:pretty;">Heavy smoked glass with a thick base, so the liquid appears to float in shadow.</span></span>
+            </div>
+          </div>
+          <div data-craft-item="1" style="position:relative;min-height:clamp(420px,82vh,900px);display:flex;flex-direction:column;justify-content:center;transition:opacity .9s ease;">
+            <div style="display:flex;flex-direction:column;gap:16px;max-width:440px;border-top:1px solid rgba(237,227,209,.14);">
+              <span style="display:block;overflow:hidden;padding-top:20px;"><span data-craft-l="1" style="display:flex;gap:14px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;"><span style="color:#e8b25a;">02</span><span data-craft-name="1" style="color:#ede3d1;transition:color .8s ease;">MATERIAL</span></span></span>
+              <span data-craft-desc="1" style="display:block;overflow:hidden;"><span data-craft-l="1" data-body-copy="1" style="display:block;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.03em;color:#cfc4b0;text-wrap:pretty;">A weighted cap in brushed dark-gold metal that closes with slow, deliberate resistance.</span></span>
+            </div>
+            <div data-craft-macro="1" style="position:relative;align-self:flex-end;width:clamp(120px,11vw,180px);aspect-ratio:2 / 3;margin-top:clamp(24px,5vh,56px);margin-right:clamp(0px,3vw,48px);overflow:hidden;clip-path:inset(100% 0% 0% 0%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);">
+              <img loading="lazy" decoding="async" src="/images/ember.jpg" alt="Macro detail of the glass shoulder and cap" style="position:absolute;left:0;top:-10%;width:100%;height:120%;object-fit:cover;object-position:50% 26%;transform-origin:50% 26%;scale:2.6;">
+            </div>
+            <span data-craft-macro-l="1" style="align-self:flex-end;margin-right:clamp(0px,3vw,48px);margin-top:10px;font-size:9px;letter-spacing:.42em;color:#a8916a;opacity:0;transition:opacity .8s ease;">DETAIL — CAP / NECK</span>
+          </div>
+          <div data-craft-item="2" style="position:relative;min-height:clamp(420px,82vh,900px);display:flex;flex-direction:column;justify-content:center;transition:opacity .9s ease;">
+            <div style="display:flex;flex-direction:column;gap:16px;max-width:440px;border-top:1px solid rgba(237,227,209,.14);">
+              <span style="display:block;overflow:hidden;padding-top:20px;"><span data-craft-l="1" style="display:flex;gap:14px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;"><span style="color:#e8b25a;">03</span><span data-craft-name="1" style="color:#ede3d1;transition:color .8s ease;">COMPOSITION</span></span></span>
+              <span data-craft-desc="1" style="display:block;overflow:hidden;"><span data-craft-l="1" data-body-copy="1" style="display:block;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.03em;color:#cfc4b0;text-wrap:pretty;">Built in layers: mineral smoke at the opening, amber at the heart, dry cedar in the drydown.</span></span>
+            </div>
+          </div>
+          <div data-craft-item="3" style="position:relative;min-height:clamp(420px,82vh,900px);display:flex;flex-direction:column;justify-content:center;transition:opacity .9s ease;">
+            <div style="display:flex;flex-direction:column;gap:16px;max-width:440px;border-top:1px solid rgba(237,227,209,.14);">
+              <span style="display:block;overflow:hidden;padding-top:20px;"><span data-craft-l="1" style="display:flex;gap:14px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;"><span style="color:#e8b25a;">04</span><span data-craft-name="1" style="color:#ede3d1;transition:color .8s ease;">LIGHT &amp; DARK</span></span></span>
+              <span data-craft-desc="1" style="display:block;overflow:hidden;"><span data-craft-l="1" data-body-copy="1" style="display:block;font-size:15px;font-weight:300;line-height:1.75;letter-spacing:.03em;color:#cfc4b0;text-wrap:pretty;">Every element is designed around contrast. What stays hidden gives shape to what glows.</span></span>
+            </div>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="final" data-3d="1" data-screen-label="07 Leave a Trace" style="position:relative;height:150vh;">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
+      <span data-final-l="1" style="position:absolute;left:clamp(20px,4vw,64px);top:15vh;font-family:'Cinzel',serif;font-size:clamp(56px,10vw,210px);line-height:.9;letter-spacing:.02em;color:#ede3d1;white-space:nowrap;">LEAVE</span>
+      <span data-final-r="1" style="position:absolute;right:clamp(20px,4vw,64px);top:48vh;font-family:'Cinzel',serif;font-size:clamp(56px,10vw,210px);line-height:.9;letter-spacing:.02em;color:#ede3d1;white-space:nowrap;">A TRACE.</span>
+      <div style="position:absolute;left:clamp(20px,4vw,64px);right:clamp(20px,4vw,64px);bottom:clamp(36px,7vh,80px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px 48px;">
+        <span data-final-meta="1" style="font-size:11px;letter-spacing:.32em;color:#cfc4b0;">NOIR No. 01 — Eau de Parfum — 100 ML</span>
+        <div data-final-meta="1" style="display:flex;align-items:center;gap:clamp(24px,3vw,48px);">
+          <span style="font-family:'Cinzel',serif;font-size:clamp(22px,2vw,32px);letter-spacing:.08em;color:#ede3d1;">$185</span>
+          <div style="position:relative;width:240px;height:115px;margin:-22px -14px -30px -8px;">
+            <button type="button" sc-camel-on-click="{{ addBag }}" aria-label="Add NOIR Nº 01 to bag" data-noir-cta="1" data-threeui-overlay="acquire" style="position:absolute;inset:0;z-index:2;width:100%;height:100%;opacity:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:space-between;gap:20px;min-width:220px;min-height:56px;padding:0 22px;border:1px solid rgba(232,178,90,.55);background:linear-gradient(180deg,rgba(232,178,90,.10),rgba(232,178,90,.03));color:#ede3d1;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.3em;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,244,222,.08);transition:background .35s ease,border-color .35s ease,color .35s ease;" style-hover="background:rgba(232,178,90,.16);border-color:#e8b25a;color:#fff3e4;">ACQUIRE NOIR <span aria-hidden="true" style="color:#e8b25a;font-size:16px;">+</span></button>
+            <iframe title="Acquire NOIR visual" aria-hidden="true" tabindex="-1" data-threeui-cta="acquire" data-threeui-label="ACQUIRE NOIR" sandbox="allow-scripts allow-same-origin" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;display:block;background:transparent;color-scheme:normal;pointer-events:none;" allowtransparency="true"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer data-footer="1" data-screen-label="08 Footer" style="position:relative;background:linear-gradient(180deg, rgba(5,4,3,.4), #050403 clamp(120px,18vh,200px));padding:clamp(72px,12vh,140px) clamp(20px,4vw,64px) 0;overflow-x:clip;">
+    <span data-foot-rule="1" style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(237,227,209,0), rgba(237,227,209,.14) 20%, rgba(232,178,90,.28) 50%, rgba(237,227,209,.14) 80%, rgba(237,227,209,0));transform-origin:50% 50%;"></span>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:48px clamp(24px,4vw,72px);">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <span style="font-size:10px;letter-spacing:.4em;color:#a8916a;">NAVIGATE</span>
+        <a href="#hero" sc-camel-on-click="{{ goHero }}" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">FRAGRANCE</a>
+        <a href="#scent" sc-camel-on-click="{{ goScent }}" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">COMPOSITION</a>
+        <a href="#collection" sc-camel-on-click="{{ goCollection }}" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">COLLECTION</a>
+        <a href="#ritual" sc-camel-on-click="{{ goRitual }}" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">STORY</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <span style="font-size:10px;letter-spacing:.4em;color:#a8916a;">FOLLOW</span>
+        <a href="#" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">INSTAGRAM</a>
+        <a href="#" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">TIKTOK</a>
+        <a href="#" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">PINTEREST</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <span style="font-size:10px;letter-spacing:.4em;color:#a8916a;">LEGAL</span>
+        <a href="#" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">PRIVACY</a>
+        <a href="#" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">TERMS</a>
+        <a href="#" style="font-size:12px;letter-spacing:.24em;color:#cfc4b0;" style-hover="color:#e8b25a;">COOKIES</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <span style="font-size:10px;letter-spacing:.4em;color:#a8916a;">NOIR Nº 01</span>
+        <span style="font-size:13px;font-weight:300;line-height:1.7;letter-spacing:.03em;color:#cfc4b0;">A fragrance shaped by smoke, amber and shadow.</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:clamp(64px,10vh,120px);padding-top:24px;border-top:1px solid rgba(237,227,209,.1);font-size:10px;letter-spacing:.34em;color:#a8916a;">
+      <span>© 2026 NOIR PARFUMS</span>
+      <span>ALL RIGHTS RESERVED</span>
+    </div>
+    <div data-wordmark="1" style="position:relative;margin-top:clamp(24px,4vh,48px);padding-bottom:clamp(28px,4vw,72px);font-family:'Cinzel',serif;font-weight:400;font-size:29vw;line-height:.74;letter-spacing:.06em;color:#ede3d1;white-space:nowrap;margin-left:-.02em;cursor:default;">NOIR</div>
+  </footer>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;fogAmount&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.4,&quot;max&quot;:1.8,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Atmosphere&quot;},&quot;exposure&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.7,&quot;max&quot;:1.4,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Atmosphere&quot;}}"></script>
+
